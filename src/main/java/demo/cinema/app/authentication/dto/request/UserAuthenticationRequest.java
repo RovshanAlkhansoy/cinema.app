@@ -1,4 +1,4 @@
-package demo.cinema.app.dto.response;
+package demo.cinema.app.authentication.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserRegisterResponse {
+public class UserAuthenticationRequest {
 
-    private String status;
-    private String message;
-    private Long userId;
+    private String userName;
+    String password;
+
 }

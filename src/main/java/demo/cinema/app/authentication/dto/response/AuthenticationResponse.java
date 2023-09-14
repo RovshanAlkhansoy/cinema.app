@@ -1,4 +1,4 @@
-package demo.cinema.app.dto.response;
+package demo.cinema.app.authentication.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BuyTicketResponse {
+public class AuthenticationResponse {
 
-    private String status;
+    private String token;
 
 }

@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class NewMovieCreationResponse {
 
+    private String status;
+
 
 
 }

@@ -1,4 +1,4 @@
-package demo.cinema.app.dto.request;
+package demo.cinema.app.authentication.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
