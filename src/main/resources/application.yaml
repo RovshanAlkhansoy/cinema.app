@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: ${ACTIVE_PROFILE:local}
+    include:
+       -db
+       -logging
+       -management
+       -server
+  banner:
+    location:
+       -banner.txt
+  application:
+    name: cinema-app
+

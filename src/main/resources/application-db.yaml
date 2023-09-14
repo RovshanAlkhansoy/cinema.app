@@ -1,0 +1,19 @@
+spring:
+  liquibase:
+    enabled: ${SPRING_LIQUIBASE_ENABLED:true}
+    change-log: classpath:db.changelog/db.changelog.yaml
+  datasource:
+    url: jdbc:postgresql://${CINEMA_APP_DB_HOST:localhost}:${CINEMA_APP_DB_PORT:5438}/${CINEMA_APP_DB_DATABASE:postgres}
+    username: ${CINEMA_APP_DB_USER:postgres}
+    password: ${CINEMA_APP_DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
