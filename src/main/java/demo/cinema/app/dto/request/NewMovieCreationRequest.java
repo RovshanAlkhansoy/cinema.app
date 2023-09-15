@@ -1,6 +1,10 @@
 package demo.cinema.app.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,19 +16,23 @@ import lombok.NoArgsConstructor;
 @Builder
 public class NewMovieCreationRequest {
 
-    @NotBlank(message = "FirstName can not be empty, blank or null")
-    private String firstName;
+    @NotBlank(message = "Title is required")
+    @Size(max = 255, message = "Title must not exceed 255 characters")
+    private String title;
 
-    @NotBlank(message = "LastName can not be empty, blank or null")
-    private String lastName;
+    @NotBlank(message = "Genre is required")
+    @Size(max = 255, message = "Genre must not exceed 255 characters")
+    private String genre;
 
-    @NotBlank(message = "FatherName can not be empty, blank or null")
-    private String fatherName;
+    @NotNull(message = "Duration is required")
+    private Integer duration;
 
-    @NotBlank(message = "UserName can not be empty, blank or null")
-    private String userName;
+    @NotNull(message = "Release date is required")
+    @Past(message = "Release date must be in the past")
+    private Date releaseDate;
 
-    @NotBlank(message = "Password can not be empty, blank or null")
-    private String password;
+    @NotBlank(message = "Rating is required")
+    @Size(max = 10, message = "Rating must not exceed 10 characters")
+    private String rating;
 
 }

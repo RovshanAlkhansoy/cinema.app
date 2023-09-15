@@ -7,24 +7,25 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = TABLE_NAME)
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,8 +34,8 @@ public class User implements UserDetails {
     public static final String TABLE_NAME = "USERS";
 
     @Id
-    @GeneratedValue //As PostgreSql using generation type should be AUTO from default
-    @Column(updatable = false, nullable = false, unique = true)
+    @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
+    @Column(name = "USER_ID", updatable = false, nullable = false, unique = true)
     private Long userId;
 
     @Column(name = "FIRST_NAME")
@@ -54,6 +55,13 @@ public class User implements UserDetails {
 
     @Column(name = "USER_BALANCE")
     private double balance;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private transient List<Ticket> tickets = new ArrayList<>();
+
+//    ticket contoller is next, there will be 2 different api buy ticket and reverse ticket, so lets start
+//i will provide requirements for them
+
 
     @Column(name = "USERTYPE")
     @Enumerated(EnumType.STRING)

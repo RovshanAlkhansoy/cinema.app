@@ -9,9 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateMovieResponse {
+public class ErrorResponse {
 
-    private Long movieId;
+    private int status;
+    private String code;
+    private String message;
+    private String path;
+    private String timestamp;
 
 }
-

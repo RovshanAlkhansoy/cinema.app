@@ -15,14 +15,12 @@ import jakarta.persistence.TemporalType;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = TABLE_NAME)
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,7 +29,7 @@ public class Session {
     public static final String TABLE_NAME = "SESSIONS";
 
     @Id
-    @GeneratedValue //As PostgreSql using generation type should be AUTO from default
+    @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
     @Column(name = "SESSION_ID", updatable = false, nullable = false, unique = true)
     private Long sessionId;
 

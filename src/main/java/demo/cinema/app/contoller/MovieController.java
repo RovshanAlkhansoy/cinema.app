@@ -5,11 +5,11 @@ import demo.cinema.app.dto.request.UpdateMovieRequest;
 import demo.cinema.app.dto.response.MovieResponse;
 import demo.cinema.app.dto.response.NewMovieCreationResponse;
 import demo.cinema.app.dto.response.UpdateMovieResponse;
+import demo.cinema.app.service.MovieService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,41 +21,62 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Validated
 @RestController
 @RequestMapping("/movies")
 @RequiredArgsConstructor
 public class MovieController {
 
+    private final MovieService movieService;
+
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<NewMovieCreationResponse> createNewMovie(
+            @RequestBody NewMovieCreationRequest newMovieCreationRequest) {
+        NewMovieCreationResponse createdMovie = movieService.createMovie(newMovieCreationRequest);
+        return ResponseEntity.ok(new NewMovieCreationResponse(createdMovie.getMovieId()));
+    }
+
+
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<NewMovieCreationResponse> createNewMovie(@RequestBody NewMovieCreationRequest newMovieCreationRequest) {
-        return null;
+    public ResponseEntity<UpdateMovieResponse> updateExistingMovie(@PathVariable Long id,
+                                                                   @RequestBody UpdateMovieRequest updateMovieRequest) {
+        UpdateMovieResponse updatedMovie = movieService.updateMovie(id, updateMovieRequest);
+        return ResponseEntity.ok(new UpdateMovieResponse(updatedMovie.getMovieId()));
     }
 
-    @PutMapping(value = "/{}")
-    public ResponseEntity<UpdateMovieResponse> updateExistingMovie(@RequestBody UpdateMovieRequest updateMovieRequest) {
-        return null;
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<MovieResponse>> getAllMovies(@RequestParam(required = false) String title,
+                                                            @RequestParam(required = false) String genre) {
+        List<MovieResponse> movies = movieService.getAllMovies(title, genre);
+        return ResponseEntity.ok(movies);
     }
 
-    @GetMapping(value = "/search")
-    public ResponseEntity<List<MovieResponse>> getAllMovies(@RequestParam(required = false) String searchQuery) {
-        return null;
-    }
-
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MovieResponse> getMovieById(@PathVariable Long id) {
-        return null;
+        MovieResponse movie = movieService.getMovieById(id);
+        if (movie != null) {
+            return ResponseEntity.ok(movie);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteMovieById(@PathVariable Long id) {
-        return null;
+        movieService.deleteMovie(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteAllMovies() {
-        return null;
+        movieService.deleteAllMovies();
+        return ResponseEntity.noContent().build();
     }
 
 }
+
