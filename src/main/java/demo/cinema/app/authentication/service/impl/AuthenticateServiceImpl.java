@@ -37,7 +37,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 .role(roleCreate())
                 .build();
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(user.getUsername());
         return UserRegisterResponse
                 .builder()
                 .token(jwtToken)
@@ -54,7 +54,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
         );
         var user = userRepository.findByUserName(userAuthenticationRequest.getUserName())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with given username: " + userAuthenticationRequest.getUserName()));
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(user.getUsername());
         return AuthenticationResponse
                 .builder()
                 .token(jwtToken)

@@ -21,16 +21,12 @@ import lombok.NoArgsConstructor;
 public class Hall {
 
     public static final String TABLE_NAME = "HALLS";
-
+    public static final int MAX_CAPACITY = 30;
     @Id
     @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
     @Column(name = "HALL_ID", updatable = false, nullable = false, unique = true)
     private String hallId;
-
     private String name;
-
-    public static final int MAX_CAPACITY = 30;
-
     private String hallType;
 
 }

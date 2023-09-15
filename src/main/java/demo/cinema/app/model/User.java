@@ -59,10 +59,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private transient List<Ticket> tickets = new ArrayList<>();
 
-//    ticket contoller is next, there will be 2 different api buy ticket and reverse ticket, so lets start
-//i will provide requirements for them
-
-
     @Column(name = "USERTYPE")
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -5,8 +5,10 @@ import demo.cinema.app.dto.request.UpdateMovieRequest;
 import demo.cinema.app.dto.response.MovieResponse;
 import demo.cinema.app.dto.response.NewMovieCreationResponse;
 import demo.cinema.app.dto.response.UpdateMovieResponse;
+import demo.cinema.app.enums.SessionType;
 import demo.cinema.app.exception.MovieNotFound;
 import demo.cinema.app.model.Movie;
+import demo.cinema.app.model.Session;
 import demo.cinema.app.repository.MovieRepository;
 import demo.cinema.app.service.MovieService;
 import java.util.List;
@@ -29,12 +31,39 @@ public class MovieServiceImpl implements MovieService {
         movie.setReleaseDate(newMovieCreationRequest.getReleaseDate());
         movie.setRating(newMovieCreationRequest.getRating());
 
+        // Create and associate sessions with the movie
+        List<SessionType> sessionTypes = newMovieCreationRequest.getSessionTypes().stream()
+                .map(this::mapSessionTypeFromString)
+                .toList();
+
+        List<Session> sessions = sessionTypes.stream()
+                .map(sessionType -> createSessionForMovie(movie, sessionType))
+                .toList();
+
+        movie.setSessions(sessions);
 
         Movie savedMovie = movieRepository.save(movie);
 
         return NewMovieCreationResponse.builder()
                 .movieId(savedMovie.getMovieId())
                 .build();
+    }
+
+    private SessionType mapSessionTypeFromString(String sessionTypeString) {
+        try {
+            return SessionType.valueOf(sessionTypeString.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            // Handle invalid session type string
+            throw new IllegalArgumentException("Invalid session type entered: " + sessionTypeString);
+        }
+    }
+
+    private Session createSessionForMovie(Movie movie, SessionType sessionType) {
+        Session session = new Session();
+        session.setSessionType(sessionType);
+        session.setMovie(movie);
+
+        return session;
     }
 
 
@@ -82,7 +111,6 @@ public class MovieServiceImpl implements MovieService {
             Movie movie = optionalMovie.get();
             return mapMovieToResponse(movie);
         } else {
-            // Handle the case where the movie with the given ID is not found
             throw new MovieNotFound();
         }
     }
