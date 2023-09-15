@@ -1,7 +1,7 @@
-package demo.cinema.app.dto.response;
+package demo.cinema.app.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +11,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TicketResponse {
+public class NewTicketCreationRequest {
 
-    private Long ticketId;
+    @NotNull(message = "Ticket price is required")
     private BigDecimal ticketPrice;
-    private Date bookingDateTime;
-    private Date reversedDateTime;
+
+    @NotNull(message = "Session ID is required")
     private Long sessionId;
+
+    @NotNull(message = "User ID is required")
     private Long userId;
 
 }
+
+

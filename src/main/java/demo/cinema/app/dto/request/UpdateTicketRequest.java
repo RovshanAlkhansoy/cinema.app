@@ -1,6 +1,7 @@
 package demo.cinema.app.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UpdateTicketRequest {
+
     @NotNull(message = "Ticket price is required")
-    private Double ticketPrice;
+    private BigDecimal ticketPrice;
+
 }

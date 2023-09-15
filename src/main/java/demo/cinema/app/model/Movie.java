@@ -11,6 +11,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,15 +34,24 @@ public class Movie {
     @Id
     @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
     @Column(updatable = false, nullable = false, unique = true)
-    private long movieId;
+    private long id;
 
+    @Column(name = "TITLE")
     private String title;
+
+    @Column(name = "GENRE")
     private String genre;
+
+    @Column(name = "DURATION")
+    @Min(value = 0, message = "Capacity must be non-negative")
     private int duration;
 
     @Temporal(TemporalType.DATE)
+    @Column(name = "RELEASE_DATE")
     private Date releaseDate;
 
+    @Column(name = "RATING")
+    @Max(value = 10)
     private String rating;
 
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)

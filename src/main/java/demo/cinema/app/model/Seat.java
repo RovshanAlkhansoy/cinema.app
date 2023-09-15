@@ -27,14 +27,16 @@ public class Seat {
     @Id
     @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
     @Column(updatable = false, nullable = false, unique = true)
-    private Long seatId;
+    private Long id;
 
+    @Column(name = "SEAT_NUMBER")
     private String seatNumber;
-    private String availabilityStatus;
+
+    @Column(name = "IS_SEAT_AVAILABLE")
+    private boolean isSeatAvailable;
 
     @ManyToOne
-    @JoinColumn(name = "hall_id", referencedColumnName = "hallId")
+    @JoinColumn(name = "HALL_ID", referencedColumnName = "hallId")
     private Hall hall;
-
 
 }
