@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +31,7 @@ public class Seat {
     private Long id;
 
     @Column(name = "SEAT_NUMBER")
+    @Positive(message = "Seat number count must be positive")
     private String seatNumber;
 
     @Column(name = "IS_SEAT_AVAILABLE")

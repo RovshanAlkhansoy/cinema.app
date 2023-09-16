@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,7 +57,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "BALANCE")
-    @Min(value = 0, message = "Balance must be non-negative")
+    @Positive(message = "Balance must be positive")
     private BigDecimal balance;
 
     @Column(name = "CREATED_AT")

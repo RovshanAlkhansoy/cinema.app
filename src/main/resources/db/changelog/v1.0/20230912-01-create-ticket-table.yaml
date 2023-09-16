@@ -1,55 +1,58 @@
 databaseChangeLog:
   - changeSet:
-      - id: createInsuranceOrderTable
-        author: shamistanHuseynov
-        changes:
-          - createTable:
-              tableName: INSURANCE_ORDER
-              columns:
-                - column:
-                    name: ID
-                    type: RAW(255)
-                    constraints:
-                      primaryKey: true
-                      nullable: false
-                - column:
-                    name: POLICY_NUMBER
-                    type: VARCHAR(255)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: CURRENCY
-                    type: VARCHAR(255)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: CURRENCY_RATE
-                    type: NUMBER(19,2)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: PREMIUM_CALCULATED
-                    type: NUMBER(19,2)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: STATUS
-                    type: VARCHAR(255)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: TYPE
-                    type: VARCHAR(255)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: COMPANY
-                    type: VARCHAR(255)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: CREATED_AT
-                    type: TIMESTAMP(6) WITH TIME ZONE
-                - column:
-                    name: UPDATED_AT
-                    type: TIMESTAMP(6) WITH TIME ZONE
+      id: 8
+      author: RovshanAlkhanov
+      comment: Create TICKETS table
+      changes:
+        - createTable:
+            tableName: TICKETS
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: TICKET_PRICE
+                  type: DECIMAL
+                  constraints:
+                    nullable: true
+              - column:
+                  name: TICKET_STATUS
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: BOOKING_DATE_TIME
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: REVERSED_DATE_TIME
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: SESSION_ID
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: USER_ID
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+              - addForeignKeyConstraint:
+                  baseTableName: TICKETS
+                  baseColumnNames: SESSION_ID
+                  referencedTableName: SESSIONS
+                  referencedColumnNames: id
+                  constraintName: FK_TICKETS_SESSION
+              - addForeignKeyConstraint:
+                  baseTableName: TICKETS
+                  baseColumnNames: USER_ID
+                  referencedTableName: USERS
+                  referencedColumnNames: id
+                  constraintName: FK_TICKETS_USER

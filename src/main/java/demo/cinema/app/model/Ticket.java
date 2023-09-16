@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.Date;
 import lombok.AllArgsConstructor;
@@ -39,7 +40,7 @@ public class Ticket {
     private Long id;
 
     @Column(name = "TICKET_PRICE")
-    @Min(value = 0, message = "Ticket price must be non-negative")
+    @Positive(message = "Ticket price count must be positive")
     private BigDecimal ticketPrice;
 
     @Column

@@ -8,7 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,14 +27,14 @@ public class Hall {
     @Id
     @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
     @Column(updatable = false, nullable = false, unique = true)
-    private String id;
+    private Long id;
 
     @Column(name = "HALL_NAME")
     private String hallName;
 
     @Column(name = "CAPACITY")
     @Max(value = 30, message = "Capacity cannot exceed 30")
-    @Min(value = 0, message = "Capacity must be non-negative")
+    @Positive(message = "Capacity must be positive")
     private int capacity = 30;
 
 }

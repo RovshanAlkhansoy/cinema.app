@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +39,7 @@ public class Session {
     private Long id;
 
     @Column(name = "AVAILABLE_SEATS_COUNT")
-    @Min(value = 0, message = "Available seat count must be non-negative")
+    @Positive(message = "Available seats count must be positive")
     private int availableSeatsCount;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,11 +51,11 @@ public class Session {
     private SessionType sessionType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HALL_ID", referencedColumnName = "hallId")
+    @JoinColumn(name = "HALL_ID", referencedColumnName = "id")
     private Hall hall;
 
-    @ManyToOne
-    @JoinColumn(name = "MOVIE_ID", referencedColumnName = "movieId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MOVIE_ID", referencedColumnName = "id")
     private Movie movie;
 
 }

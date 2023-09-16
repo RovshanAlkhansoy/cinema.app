@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +34,7 @@ public class Movie {
     @Id
     @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
     @Column(updatable = false, nullable = false, unique = true)
-    private long id;
+    private Long id;
 
     @Column(name = "TITLE")
     private String title;
@@ -43,7 +43,7 @@ public class Movie {
     private String genre;
 
     @Column(name = "DURATION")
-    @Min(value = 0, message = "Capacity must be non-negative")
+    @Positive(message = "Duration must be positive")
     private int duration;
 
     @Temporal(TemporalType.DATE)
@@ -51,6 +51,7 @@ public class Movie {
     private Date releaseDate;
 
     @Column(name = "RATING")
+    @Positive(message = "Rating must be positive")
     @Max(value = 10)
     private String rating;
 
