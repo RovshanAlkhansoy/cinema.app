@@ -24,32 +24,32 @@ public class HallController {
 
     private final HallService hallService;
 
-    @PostMapping
+    @PostMapping("create")
     public ResponseEntity<HallResponse> createHall(@RequestBody NewHallCreationRequest newHallCreationRequest) {
         HallResponse createdHall = hallService.createHall(newHallCreationRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdHall);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getHallById/{id}")
     public ResponseEntity<HallResponse> getHallById(@PathVariable Long id) {
         HallResponse hall = hallService.getHallById(id);
         return ResponseEntity.ok(hall);
     }
 
-    @GetMapping
+    @GetMapping("/getAllHalls")
     public ResponseEntity<List<HallResponse>> getAllHalls() {
         List<HallResponse> halls = hallService.getAllHalls();
         return ResponseEntity.ok(halls);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateHall/{id}")
     public ResponseEntity<HallResponse> updateHall(@PathVariable Long id, @RequestBody UpdateHallRequest updateHallRequest) {
         HallResponse updatedHall = hallService.updateHall(id, updateHallRequest);
         return ResponseEntity.ok(updatedHall);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteHall(@PathVariable Long id) {
+    @DeleteMapping("/deleteHallById/{id}")
+    public ResponseEntity<Void> deleteHallById(@PathVariable Long id) {
         hallService.deleteHallById(id);
         return ResponseEntity.noContent().build();
     }

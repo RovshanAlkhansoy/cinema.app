@@ -45,7 +45,7 @@ public class MovieServiceImpl implements MovieService {
         Movie savedMovie = movieRepository.save(movie);
 
         return NewMovieCreationResponse.builder()
-                .movieId(savedMovie.getMovieId())
+                .movieId(savedMovie.getId())
                 .build();
     }
 
@@ -81,13 +81,20 @@ public class MovieServiceImpl implements MovieService {
             Movie updatedMovie = movieRepository.save(movie);
 
             return UpdateMovieResponse.builder()
-                    .movieId(updatedMovie.getMovieId())
+                    .movieId(updatedMovie.getId())
                     .build();
         } else {
             throw new MovieNotFound();
         }
     }
 
+    @Override
+    public List<MovieResponse> getAllMoviesWithSessions() {
+        List<Movie> movies = movieRepository.findAllMoviesWithSessions();
+        return movies.stream()
+                .map(this::mapMovieToResponse)
+                .toList();
+    }
 
     @Override
     public List<MovieResponse> getAllMovies(String titleQuery, String genreQuery) {
@@ -127,7 +134,7 @@ public class MovieServiceImpl implements MovieService {
 
     private MovieResponse mapMovieToResponse(Movie movie) {
         MovieResponse response = new MovieResponse();
-        response.setId(movie.getMovieId());
+        response.setId(movie.getId());
         response.setTitle(movie.getTitle());
         response.setGenre(movie.getGenre());
         response.setDuration(movie.getDuration());

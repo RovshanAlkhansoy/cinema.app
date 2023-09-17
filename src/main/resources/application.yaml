@@ -1,11 +1,6 @@
 spring:
   profiles:
-    active: ${ACTIVE_PROFILE:local}
-    include:
-       -db
-       -logging
-       -management
-       -server
+    include: logging, management, server, db
   banner:
     location:
        -banner.txt

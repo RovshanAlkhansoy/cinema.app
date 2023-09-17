@@ -3,7 +3,6 @@ package demo.cinema.app.authentication.controller;
 import demo.cinema.app.authentication.dto.request.RefreshTokenRequest;
 import demo.cinema.app.authentication.dto.request.UserAuthenticationRequest;
 import demo.cinema.app.authentication.dto.request.UserRegisterRequest;
-import demo.cinema.app.authentication.dto.response.AuthenticationResponse;
 import demo.cinema.app.authentication.dto.response.JwtResponse;
 import demo.cinema.app.authentication.dto.response.UserRegisterResponse;
 import demo.cinema.app.authentication.model.RefreshToken;
@@ -15,8 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,32 +31,32 @@ public class AuthenticationController {
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
 
-    @PostMapping(value = "/register")
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserRegisterResponse> registerNewUser(@RequestBody UserRegisterRequest userRegisterRequest) {
         return ResponseEntity.ok(authenticateService.register(userRegisterRequest));
     }
 
-    @PostMapping(value = "/authenticate")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<AuthenticationResponse> authenticateRequest(@RequestBody UserAuthenticationRequest userAuthenticationRequest) {
-        return ResponseEntity.ok(authenticateService.authenticate(userAuthenticationRequest));
-    }
+    @PostMapping("/authenticate")
+    public ResponseEntity<JwtResponse> authenticate(@RequestBody UserAuthenticationRequest authenticationRequest) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
 
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authenticationRequest.getUserName(),
+                        authenticationRequest.getPassword()
+                )
+        );
 
-    @PostMapping("/login")
-    public JwtResponse authenticateAndGetToken(@RequestBody UserAuthenticationRequest userAuthenticationRequest) {
-        Authentication authentication =
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAuthenticationRequest.getUserName(), userAuthenticationRequest.getPassword()));
-        if (authentication.isAuthenticated()) {
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(userAuthenticationRequest.getUserName());
-            return JwtResponse.builder()
-                    .accessToken(jwtService.generateToken(userAuthenticationRequest.getUserName()))
-                    .token(refreshToken.getToken()).build();
-        } else {
-            throw new UsernameNotFoundException("invalid user request !");
-        }
+        var jwtToken = jwtService.generateToken(userDetails);
+        var refreshToken = refreshTokenService.createRefreshToken(authenticationRequest.getUserName());
+
+        return ResponseEntity.ok(JwtResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken.getToken())
+                .build());
     }
 
     @PostMapping("/refreshToken")
@@ -66,10 +65,10 @@ public class AuthenticationController {
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUser)
                 .map(user -> {
-                    String accessToken = jwtService.generateToken(user.getUsername());
+                    String accessToken = jwtService.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
                     return JwtResponse.builder()
                             .accessToken(accessToken)
-                            .token(refreshTokenRequest.getToken())
+                            .refreshToken(refreshTokenRequest.getToken())
                             .build();
                 }).orElseThrow(() -> new RuntimeException(
                         "Refresh token is not in database!"));

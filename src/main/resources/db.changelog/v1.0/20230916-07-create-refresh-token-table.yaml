@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10
+      author: RovshanAlkhanov
+      comment: Create REFRESH_TOKENS table
+      changes:
+        - createTable:
+            tableName: REFRESH_TOKENS
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: TOKEN
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: EXPIRY_DATE
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: USER_ID
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseTableName: REFRESH_TOKENS
+            baseColumnNames: USER_ID
+            referencedTableName: USERS
+            referencedColumnNames: id
+            constraintName: FK_REFRESH_TOKEN_USER

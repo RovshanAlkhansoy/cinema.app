@@ -3,21 +3,25 @@ package demo.cinema.app.model;
 import static demo.cinema.app.model.Session.TABLE_NAME;
 
 import demo.cinema.app.enums.SessionType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +38,7 @@ public class Session {
     public static final String TABLE_NAME = "SESSIONS";
 
     @Id
-    @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, unique = true)
     private Long id;
 
@@ -49,6 +53,9 @@ public class Session {
     @Column(name = "SESSION_TYPE")
     @Enumerated(EnumType.STRING)
     private SessionType sessionType;
+
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    private List<Ticket> tickets = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HALL_ID", referencedColumnName = "id")

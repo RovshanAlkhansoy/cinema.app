@@ -5,6 +5,7 @@ import static demo.cinema.app.model.Seat.TABLE_NAME;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -26,7 +27,7 @@ public class Seat {
     public static final String TABLE_NAME = "SEATS";
 
     @Id
-    @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, unique = true)
     private Long id;
 

@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: RovshanAlkhanov
+      comment: Create SEATS table
+      changes:
+        - createTable:
+            tableName: SEATS
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: SEAT_NUMBER
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: IS_SEAT_AVAILABLE
+                  type: BOOLEAN
+                  constraints:
+                    nullable: true
+              - column:
+                  name: HALL_ID
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseTableName: SEATS
+            baseColumnNames: HALL_ID
+            referencedTableName: HALLS
+            referencedColumnNames: id
+            constraintName: FK_SEATS_HALL
+  - changeSet:
+      id: 6
+      author: RovshanAlkhanov
+      comment: Add sequence for SEATS table ID
+      changes:
+        - createSequence:
+            sequenceName: SEATS_ID_SEQ
+            startValue: 1
+            incrementBy: 1

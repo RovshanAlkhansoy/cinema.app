@@ -8,10 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class User implements UserDetails {
     public static final String TABLE_NAME = "USERS";
 
     @Id
-    @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, unique = true)
     private Long id;
 
@@ -66,9 +66,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private transient List<Ticket> tickets = new ArrayList<>();
 
-    @Column(name = "USER_ROLE")
+    @Column(name = "ROLES")
     @Enumerated(EnumType.STRING)
     private Role role;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

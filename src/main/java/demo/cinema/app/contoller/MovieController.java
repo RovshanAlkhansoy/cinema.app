@@ -5,6 +5,7 @@ import demo.cinema.app.dto.request.UpdateMovieRequest;
 import demo.cinema.app.dto.response.MovieResponse;
 import demo.cinema.app.dto.response.NewMovieCreationResponse;
 import demo.cinema.app.dto.response.UpdateMovieResponse;
+import demo.cinema.app.model.Movie;
 import demo.cinema.app.service.MovieService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class MovieController {
 
     private final MovieService movieService;
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<NewMovieCreationResponse> createNewMovie(
             @RequestBody NewMovieCreationRequest newMovieCreationRequest) {
@@ -37,15 +38,21 @@ public class MovieController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("updateMovie/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UpdateMovieResponse> updateExistingMovie(@PathVariable Long id,
+    public ResponseEntity<UpdateMovieResponse> updateMovie(@PathVariable Long id,
                                                                    @RequestBody UpdateMovieRequest updateMovieRequest) {
         UpdateMovieResponse updatedMovie = movieService.updateMovie(id, updateMovieRequest);
         return ResponseEntity.ok(new UpdateMovieResponse(updatedMovie.getMovieId()));
     }
 
-    @GetMapping("/search")
+    @GetMapping("/all-with-sessions")
+    public ResponseEntity<List<MovieResponse>> getAllMoviesWithSessions() {
+        List<MovieResponse> movies = movieService.getAllMoviesWithSessions();
+        return ResponseEntity.ok(movies);
+    }
+
+    @GetMapping("/getAllMovies")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<MovieResponse>> getAllMovies(@RequestParam(required = false) String title,
                                                             @RequestParam(required = false) String genre) {
@@ -53,7 +60,7 @@ public class MovieController {
         return ResponseEntity.ok(movies);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getMovieById/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MovieResponse> getMovieById(@PathVariable Long id) {
         MovieResponse movie = movieService.getMovieById(id);
@@ -64,14 +71,14 @@ public class MovieController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteMovieById/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteMovieById(@PathVariable Long id) {
         movieService.deleteMovie(id);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/deleteAllMovies")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteAllMovies() {
         movieService.deleteAllMovies();

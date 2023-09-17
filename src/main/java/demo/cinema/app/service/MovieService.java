@@ -13,6 +13,8 @@ public interface MovieService {
 
     UpdateMovieResponse updateMovie(Long id, UpdateMovieRequest updateMovieRequest);
 
+    List<MovieResponse> getAllMoviesWithSessions();
+
     List<MovieResponse> getAllMovies(String titleQuery, String genreQuer);
 
     MovieResponse getMovieById(Long id);

@@ -5,6 +5,7 @@ import demo.cinema.app.dto.request.UpdateSessionRequest;
 import demo.cinema.app.dto.response.SessionResponse;
 import demo.cinema.app.exception.HallNotFound;
 import demo.cinema.app.exception.MovieNotFound;
+import demo.cinema.app.exception.SeatsOutOfRange;
 import demo.cinema.app.exception.SessionNotFound;
 import demo.cinema.app.model.Hall;
 import demo.cinema.app.model.Movie;
@@ -15,7 +16,6 @@ import demo.cinema.app.repository.SessionRepository;
 import demo.cinema.app.service.SessionService;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +28,17 @@ public class SessionServiceImpl implements SessionService {
     private final HallRepository hallRepository;
 
     @Override
-    public SessionResponse createSession(NewSessionCreationRequest newSessionCreationRequest) {
+    public SessionResponse createSession(NewSessionCreationRequest newSessionCreationRequest) throws SeatsOutOfRange {
         Movie movie = movieRepository.findById(newSessionCreationRequest.getMovieId())
                 .orElseThrow(MovieNotFound::new);
 
         Hall hall = hallRepository.findById(newSessionCreationRequest.getHallId())
                 .orElseThrow(HallNotFound::new);
+
+        int availableSeatsCount = newSessionCreationRequest.getAvailableSeatsCount();
+        if (availableSeatsCount <= 0 || availableSeatsCount > hall.getCapacity()) {
+            throw new SeatsOutOfRange("Available seats count is not within hall's capacity");
+        }
 
         Session session = Session.builder()
                 .movie(movie)
@@ -86,7 +91,7 @@ public class SessionServiceImpl implements SessionService {
                         .hallId(session.getHall().getId())
                         .movieId(session.getMovie().getId())
                         .build())
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

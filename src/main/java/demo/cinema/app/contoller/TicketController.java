@@ -25,40 +25,40 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    @PostMapping
+    @PostMapping("/createTicket")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<TicketResponse> createTicket(@RequestBody NewTicketCreationRequest request) {
         TicketResponse createdTicket = ticketService.createTicket(request);
         return ResponseEntity.ok(createdTicket);
     }
 
-    @PutMapping("/{ticketId}")
+    @PutMapping("/updateTicket/{ticketId}")
     public ResponseEntity<TicketResponse> updateTicket(@PathVariable Long ticketId, @RequestBody UpdateTicketRequest request) {
         TicketResponse updatedTicket = ticketService.updateTicket(ticketId, request);
         return ResponseEntity.ok(updatedTicket);
     }
 
-    @GetMapping("/{ticketId}")
+    @GetMapping("/getTicketById/{ticketId}")
     public ResponseEntity<TicketResponse> getTicketById(@PathVariable Long ticketId) {
         TicketResponse ticket = ticketService.getTicketById(ticketId);
         return ResponseEntity.ok(ticket);
     }
 
-    @GetMapping
+    @GetMapping("/getAllTickets")
     public ResponseEntity<List<TicketResponse>> getAllTickets() {
         List<TicketResponse> ticket = ticketService.getAllTickets();
         return ResponseEntity.ok(ticket);
     }
 
-    @DeleteMapping("/{ticketId}")
+    @DeleteMapping("/deleteTicketById/{ticketId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTicket(@PathVariable Long ticketId) {
+    public void deleteTicketById(@PathVariable Long ticketId) {
         ticketService.deleteTicketById(ticketId);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/deleteAllTickets")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTicket() {
+    public void deleteAllTickets() {
         ticketService.deleteAllTickets();
     }
 

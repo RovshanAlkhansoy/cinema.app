@@ -3,11 +3,13 @@ package demo.cinema.app.contoller;
 import demo.cinema.app.dto.request.NewSessionCreationRequest;
 import demo.cinema.app.dto.request.UpdateSessionRequest;
 import demo.cinema.app.dto.response.SessionResponse;
+import demo.cinema.app.exception.SeatsOutOfRange;
 import demo.cinema.app.service.SessionService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,9 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class SessionController {
 
     private final SessionService sessionService;
+    @PreAuthorize("hasAuthority('ADMIN')")
 
     @PostMapping("/createSession")
-    public ResponseEntity<SessionResponse> createSession(@RequestBody NewSessionCreationRequest newSessionCreationRequest) {
+    public ResponseEntity<SessionResponse> createSession(@RequestBody NewSessionCreationRequest newSessionCreationRequest) throws SeatsOutOfRange {
         SessionResponse createdSession = sessionService.createSession(newSessionCreationRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSession);
     }
@@ -43,6 +46,7 @@ public class SessionController {
     }
 
     @PutMapping("/updateSession/{sessionId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<SessionResponse> updateSession(
             @PathVariable Long sessionId,
             @RequestBody UpdateSessionRequest updateSessionRequest
@@ -52,12 +56,14 @@ public class SessionController {
     }
 
     @DeleteMapping("/deleteSessionById/{sessionId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteSessionById(@PathVariable Long sessionId) {
         sessionService.deleteSessionById(sessionId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/deleteAllSessions")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteAllSessions() {
         sessionService.deleteAllSessions();
         return ResponseEntity.noContent().build();

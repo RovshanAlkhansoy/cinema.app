@@ -9,6 +9,7 @@ import demo.cinema.app.enums.Role;
 import demo.cinema.app.model.User;
 import demo.cinema.app.repository.UserRepository;
 import demo.cinema.app.service.JwtService;
+import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticateServiceImpl implements AuthenticateService {
+
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -33,11 +35,11 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 .fatherName(userRegisterRequest.getFatherName())
                 .userName(userRegisterRequest.getUserName())
                 .password(passwordEncoder.encode(userRegisterRequest.getPassword()))
-                .balance(100.00)
+                .balance(BigDecimal.valueOf(100.00))
                 .role(roleCreate())
                 .build();
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user.getUsername());
+        var jwtToken = jwtService.generateToken(user);
         return UserRegisterResponse
                 .builder()
                 .token(jwtToken)
@@ -53,8 +55,9 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 )
         );
         var user = userRepository.findByUserName(userAuthenticationRequest.getUserName())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with given username: " + userAuthenticationRequest.getUserName()));
-        var jwtToken = jwtService.generateToken(user.getUsername());
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with given username: " +
+                        userAuthenticationRequest.getUserName()));
+        var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse
                 .builder()
                 .token(jwtToken)

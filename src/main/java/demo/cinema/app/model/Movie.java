@@ -2,10 +2,12 @@ package demo.cinema.app.model;
 
 import static demo.cinema.app.model.Movie.TABLE_NAME;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -32,7 +34,7 @@ public class Movie {
     public static final String TABLE_NAME = "MOVIES";
 
     @Id
-    @GeneratedValue //As PostgreSql is using generation type should be AUTO (default)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, unique = true)
     private Long id;
 
@@ -55,7 +57,7 @@ public class Movie {
     @Max(value = 10)
     private String rating;
 
-    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Session> sessions = new ArrayList<>();
 
 }
