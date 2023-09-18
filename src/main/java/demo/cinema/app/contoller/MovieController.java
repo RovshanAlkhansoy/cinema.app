@@ -3,10 +3,11 @@ package demo.cinema.app.contoller;
 import demo.cinema.app.dto.request.NewMovieCreationRequest;
 import demo.cinema.app.dto.request.UpdateMovieRequest;
 import demo.cinema.app.dto.response.MovieResponse;
-import demo.cinema.app.dto.response.NewMovieCreationResponse;
-import demo.cinema.app.dto.response.UpdateMovieResponse;
-import demo.cinema.app.model.Movie;
 import demo.cinema.app.service.MovieService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,28 +26,43 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/movies")
 @RequiredArgsConstructor
+@Api(tags = "Movies") // Add a tag for the controller
 public class MovieController {
 
     private final MovieService movieService;
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<NewMovieCreationResponse> createNewMovie(
+    @ApiOperation("Create a new movie")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Movie created successfully"),
+            @ApiResponse(code = 400, message = "Bad request"),
+    })
+    public ResponseEntity<MovieResponse> createNewMovie(
             @RequestBody NewMovieCreationRequest newMovieCreationRequest) {
-        NewMovieCreationResponse createdMovie = movieService.createMovie(newMovieCreationRequest);
-        return ResponseEntity.ok(new NewMovieCreationResponse(createdMovie.getMovieId()));
+        MovieResponse createdMovie = movieService.createMovie(newMovieCreationRequest);
+        return ResponseEntity.ok(createdMovie);
     }
-
 
     @PutMapping("updateMovie/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UpdateMovieResponse> updateMovie(@PathVariable Long id,
-                                                                   @RequestBody UpdateMovieRequest updateMovieRequest) {
-        UpdateMovieResponse updatedMovie = movieService.updateMovie(id, updateMovieRequest);
-        return ResponseEntity.ok(new UpdateMovieResponse(updatedMovie.getMovieId()));
+    @ApiOperation("Update a movie by ID")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Movie updated successfully"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 404, message = "Movie not found"),
+    })
+    public ResponseEntity<MovieResponse> updateMovie(@PathVariable Long id,
+                                                     @RequestBody UpdateMovieRequest updateMovieRequest) {
+        MovieResponse updatedMovie = movieService.updateMovie(id, updateMovieRequest);
+        return ResponseEntity.ok(updatedMovie);
     }
 
     @GetMapping("/all-with-sessions")
+    @ApiOperation("Get all movies with sessions")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Movies retrieved successfully"),
+    })
     public ResponseEntity<List<MovieResponse>> getAllMoviesWithSessions() {
         List<MovieResponse> movies = movieService.getAllMoviesWithSessions();
         return ResponseEntity.ok(movies);
@@ -54,14 +70,24 @@ public class MovieController {
 
     @GetMapping("/getAllMovies")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<MovieResponse>> getAllMovies(@RequestParam(required = false) String title,
-                                                            @RequestParam(required = false) String genre) {
+    @ApiOperation("Get all movies")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Movies retrieved successfully"),
+    })
+    public ResponseEntity<List<MovieResponse>> getAllMovies(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String genre) {
         List<MovieResponse> movies = movieService.getAllMovies(title, genre);
         return ResponseEntity.ok(movies);
     }
 
     @GetMapping("/getMovieById/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation("Get a movie by ID")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Movie retrieved successfully"),
+            @ApiResponse(code = 404, message = "Movie not found"),
+    })
     public ResponseEntity<MovieResponse> getMovieById(@PathVariable Long id) {
         MovieResponse movie = movieService.getMovieById(id);
         if (movie != null) {
@@ -73,6 +99,11 @@ public class MovieController {
 
     @DeleteMapping("/deleteMovieById/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation("Delete a movie by ID")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Movie deleted successfully"),
+            @ApiResponse(code = 404, message = "Movie not found"),
+    })
     public ResponseEntity<Void> deleteMovieById(@PathVariable Long id) {
         movieService.deleteMovie(id);
         return ResponseEntity.noContent().build();
@@ -80,10 +111,13 @@ public class MovieController {
 
     @DeleteMapping("/deleteAllMovies")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation("Delete all movies")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Movies deleted successfully"),
+    })
     public ResponseEntity<Void> deleteAllMovies() {
         movieService.deleteAllMovies();
         return ResponseEntity.noContent().build();
     }
-
 }
 

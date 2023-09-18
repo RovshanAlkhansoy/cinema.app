@@ -3,8 +3,6 @@ package demo.cinema.app.service.impl;
 import demo.cinema.app.dto.request.NewMovieCreationRequest;
 import demo.cinema.app.dto.request.UpdateMovieRequest;
 import demo.cinema.app.dto.response.MovieResponse;
-import demo.cinema.app.dto.response.NewMovieCreationResponse;
-import demo.cinema.app.dto.response.UpdateMovieResponse;
 import demo.cinema.app.enums.SessionType;
 import demo.cinema.app.exception.MovieNotFound;
 import demo.cinema.app.model.Movie;
@@ -23,7 +21,7 @@ public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
 
     @Override
-    public NewMovieCreationResponse createMovie(NewMovieCreationRequest newMovieCreationRequest) {
+    public MovieResponse createMovie(NewMovieCreationRequest newMovieCreationRequest) {
         Movie movie = new Movie();
         movie.setTitle(newMovieCreationRequest.getTitle());
         movie.setGenre(newMovieCreationRequest.getGenre());
@@ -44,19 +42,9 @@ public class MovieServiceImpl implements MovieService {
 
         Movie savedMovie = movieRepository.save(movie);
 
-        return NewMovieCreationResponse.builder()
-                .movieId(savedMovie.getId())
-                .build();
+        return mapMovieToMovieResponse(savedMovie);
     }
 
-    private SessionType mapSessionTypeFromString(String sessionTypeString) {
-        try {
-            return SessionType.valueOf(sessionTypeString.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            // Handle invalid session type string
-            throw new IllegalArgumentException("Invalid session type entered: " + sessionTypeString);
-        }
-    }
 
     private Session createSessionForMovie(Movie movie, SessionType sessionType) {
         Session session = new Session();
@@ -68,7 +56,7 @@ public class MovieServiceImpl implements MovieService {
 
 
     @Override
-    public UpdateMovieResponse updateMovie(Long id, UpdateMovieRequest updateMovieRequest) {
+    public MovieResponse updateMovie(Long id, UpdateMovieRequest updateMovieRequest) {
         Optional<Movie> optionalMovie = movieRepository.findById(id);
         if (optionalMovie.isPresent()) {
             Movie movie = optionalMovie.get();
@@ -80,9 +68,7 @@ public class MovieServiceImpl implements MovieService {
 
             Movie updatedMovie = movieRepository.save(movie);
 
-            return UpdateMovieResponse.builder()
-                    .movieId(updatedMovie.getId())
-                    .build();
+            return mapMovieToMovieResponse(updatedMovie);
         } else {
             throw new MovieNotFound();
         }
@@ -92,7 +78,7 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieResponse> getAllMoviesWithSessions() {
         List<Movie> movies = movieRepository.findAllMoviesWithSessions();
         return movies.stream()
-                .map(this::mapMovieToResponse)
+                .map(this::mapMovieToMovieResponse)
                 .toList();
     }
 
@@ -106,7 +92,7 @@ public class MovieServiceImpl implements MovieService {
             movies = movieRepository.findAll();
         }
         return movies.stream()
-                .map(this::mapMovieToResponse)
+                .map(this::mapMovieToMovieResponse)
                 .toList();
     }
 
@@ -116,7 +102,7 @@ public class MovieServiceImpl implements MovieService {
         Optional<Movie> optionalMovie = movieRepository.findById(id);
         if (optionalMovie.isPresent()) {
             Movie movie = optionalMovie.get();
-            return mapMovieToResponse(movie);
+            return mapMovieToMovieResponse(movie);
         } else {
             throw new MovieNotFound();
         }
@@ -132,7 +118,16 @@ public class MovieServiceImpl implements MovieService {
         movieRepository.deleteAll();
     }
 
-    private MovieResponse mapMovieToResponse(Movie movie) {
+    private SessionType mapSessionTypeFromString(String sessionTypeString) {
+        try {
+            return SessionType.valueOf(sessionTypeString.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            // Handle invalid session type string
+            throw new IllegalArgumentException("Invalid session type entered: " + sessionTypeString);
+        }
+    }
+
+    private MovieResponse mapMovieToMovieResponse(Movie movie) {
         MovieResponse response = new MovieResponse();
         response.setId(movie.getId());
         response.setTitle(movie.getTitle());

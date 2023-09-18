@@ -8,7 +8,6 @@ import demo.cinema.app.model.Hall;
 import demo.cinema.app.repository.HallRepository;
 import demo.cinema.app.service.HallService;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +27,7 @@ public class HallServiceImpl implements HallService {
 
         Hall savedHall = hallRepository.save(hall);
 
-        return HallResponse.builder()
-                .id(savedHall.getId())
-                .hallName(savedHall.getHallName())
-                .capacity(savedHall.getCapacity())
-                .build();
+        return mapToHallResponse(savedHall);
     }
 
     @Override
@@ -40,11 +35,7 @@ public class HallServiceImpl implements HallService {
         Hall hall = hallRepository.findById(id)
                 .orElseThrow(HallNotFound::new);
 
-        return HallResponse.builder()
-                .id(hall.getId())
-                .hallName(hall.getHallName())
-                .capacity(hall.getCapacity())
-                .build();
+        return mapToHallResponse(hall);
     }
 
     @Override
@@ -53,7 +44,7 @@ public class HallServiceImpl implements HallService {
 
         return halls.stream()
                 .map(this::mapToHallResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

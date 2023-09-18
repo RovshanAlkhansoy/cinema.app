@@ -14,6 +14,7 @@ import demo.cinema.app.repository.HallRepository;
 import demo.cinema.app.repository.MovieRepository;
 import demo.cinema.app.repository.SessionRepository;
 import demo.cinema.app.service.SessionService;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -82,18 +83,52 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
+    public List<SessionResponse> getSessionByMovie(Long movieId) {
+        List<Session> sessions = sessionRepository.findByMovie(movieId);
+        return sessions.stream().map(this::mapSessionToSessionResponse).toList();
+    }
+
+
+    @Override
+    public List<SessionResponse> getSessionByDate(Date from, Date to) {
+        List<Session> sessions = sessionRepository.findByDate(from, to);
+        return sessions.stream().map(this::mapSessionToSessionResponse).toList();
+    }
+
+
+    @Override
+    public List<SessionResponse> getSessionsByHall(Long hallId) {
+        List<Session> sessions = sessionRepository.findByHall(hallId);
+        return sessions.stream().map(this::mapSessionToSessionResponse).toList();
+    }
+
+
+    @Override
+    public List<SessionResponse> getSessionByMovieAndDate(Long movieId, Date from, Date to) {
+        List<Session> sessions = sessionRepository.findByMovieAndDate(movieId, from, to);
+        return sessions.stream().map(this::mapSessionToSessionResponse).toList();
+    }
+
+
+    @Override
+    public List<SessionResponse> getSessionsByMovieAndHall(Long movieId, Long hallId) {
+        List<Session> sessions = sessionRepository.findByMovieAndHall(movieId, hallId);
+        return sessions.stream().map(this::mapSessionToSessionResponse).toList();
+    }
+
+
+    @Override
+    public Integer getAvailableSeatsCount(Long sessionId) {
+        Session session = sessionRepository.findById(sessionId).orElseThrow(SessionNotFound::new);
+        return session.getAvailableSeatsCount();
+    }
+
+
+    @Override
     public List<SessionResponse> getAllSessions() {
         List<Session> sessions = sessionRepository.findAll();
         return sessions.stream()
-                .map(session -> SessionResponse.builder()
-                        .id(session.getId())
-                        .availableSeatsCount(session.getAvailableSeatsCount())
-                        .showtime(session.getShowtime())
-                        .sessionType(session.getSessionType())
-                        .hallId(session.getHall().getId())
-                        .movieId(session.getMovie().getId())
-                        .build())
-                .toList();
+                .map(this::mapSessionToSessionResponse).toList();
     }
 
     @Override
@@ -101,6 +136,7 @@ public class SessionServiceImpl implements SessionService {
         Optional<Session> optionalSession = sessionRepository.findById(sessionId);
         return optionalSession.map(session -> SessionResponse.builder()
                         .id(session.getId())
+                        .movieId(session.getMovie().getId())
                         .availableSeatsCount(session.getAvailableSeatsCount())
                         .showtime(session.getShowtime())
                         .sessionType(session.getSessionType())
@@ -120,6 +156,17 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void deleteAllSessions() {
         sessionRepository.deleteAll();
+    }
+
+    private SessionResponse mapSessionToSessionResponse(Session session) {
+        return SessionResponse.builder()
+                .id(session.getId())
+                .movieId(session.getMovie().getId())
+                .hallId(session.getHall().getId())
+                .sessionType(session.getSessionType())
+                .showtime(session.getShowtime())
+                .availableSeatsCount(session.getAvailableSeatsCount())
+                .build();
     }
 
 }

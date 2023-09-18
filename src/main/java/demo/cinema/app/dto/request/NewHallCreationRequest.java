@@ -20,5 +20,6 @@ public class NewHallCreationRequest {
 
     @Positive(message = "Capacity must be positive")
     private int capacity;
+
 }
 

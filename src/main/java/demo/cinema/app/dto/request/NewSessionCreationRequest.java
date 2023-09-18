@@ -34,6 +34,7 @@ public class NewSessionCreationRequest {
 
     @NotNull(message = "Available seats count is required")
     @Positive(message = "Available seats count must be positive")
-    @Max(value = 30,message = "Each Session can have maximum 30 seats")
+    @Max(value = 30, message = "Each Session can have maximum 30 seats")
     private Integer availableSeatsCount;
+
 }

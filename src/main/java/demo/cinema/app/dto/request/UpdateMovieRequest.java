@@ -1,10 +1,8 @@
 package demo.cinema.app.dto.request;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import java.util.Date;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,9 +27,5 @@ public class UpdateMovieRequest {
 
     @Size(max = 10, message = "Rating must not exceed 10 characters")
     private String rating;
-
-    @NotNull(message = "Session type is required")
-    private List<String> sessionTypes;
-
 
 }

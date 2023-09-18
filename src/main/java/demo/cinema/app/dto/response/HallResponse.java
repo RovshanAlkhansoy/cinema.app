@@ -14,4 +14,5 @@ public class HallResponse {
     private Long id;
     private String hallName;
     private int capacity;
+
 }

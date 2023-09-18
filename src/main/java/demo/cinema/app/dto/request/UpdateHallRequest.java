@@ -1,5 +1,6 @@
 package demo.cinema.app.dto.request;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -19,6 +20,8 @@ public class UpdateHallRequest {
     private String hallName;
 
     @Positive(message = "Capacity must be positive")
+    @Max(value = 30, message = "Capacity cannot exceed 30")
     private int capacity;
+
 }
 

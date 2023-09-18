@@ -26,4 +26,5 @@ public class UpdateSessionRequest {
     @NotNull(message = "Available seats count is required")
     @Positive(message = "Available seats count must be positive")
     private Integer availableSeatsCount;
+
 }
