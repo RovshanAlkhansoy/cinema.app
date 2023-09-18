@@ -40,12 +40,12 @@ public class Ticket {
     private Long id;
 
     @Column(name = "TICKET_PRICE")
-    @Positive(message = "Ticket price count must be positive")
+    @Positive(message = "Ticket price must be positive")
     private BigDecimal ticketPrice;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private TicketStatus ticketStatus;
+    private TicketStatus ticketStatus = TicketStatus.AVAILABLE;
 
     @Column(name = "BOOKING_DATE_TIME", updatable = false)
     @CreationTimestamp

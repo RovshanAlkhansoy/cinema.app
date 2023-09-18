@@ -6,7 +6,8 @@ import lombok.Getter;
 
 public enum TicketStatus {
 
-    BOOKED,
+    AVAILABLE,
 
-    CANCELLED
+    BOOKED
+
 }

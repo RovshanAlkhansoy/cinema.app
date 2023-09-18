@@ -19,8 +19,6 @@ public class NewTicketCreationRequest {
     @NotNull(message = "Session ID is required")
     private Long sessionId;
 
-    @NotNull(message = "User ID is required")
-    private Long userId;
 
 }
 

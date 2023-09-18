@@ -36,8 +36,10 @@ public class SessionServiceImpl implements SessionService {
                 .orElseThrow(HallNotFound::new);
 
         int availableSeatsCount = newSessionCreationRequest.getAvailableSeatsCount();
-        if (availableSeatsCount <= 0 || availableSeatsCount > hall.getCapacity()) {
-            throw new SeatsOutOfRange("Available seats count is not within hall's capacity");
+        int hallCapacity = hall.getCapacity();
+
+        if (availableSeatsCount <= 0 || availableSeatsCount > hallCapacity) {
+            throw new SeatsOutOfRange("Available seats count is not within the hall's capacity");
         }
 
         Session session = Session.builder()

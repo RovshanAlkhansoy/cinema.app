@@ -1,8 +1,10 @@
 package demo.cinema.app.exception;
 
-public class SeatsOutOfRange extends Throwable {
+public class SeatsOutOfRange extends RuntimeException {
 
-    public SeatsOutOfRange(String s) {
+
+    public SeatsOutOfRange(String message) {
+        super(message);
     }
 
 }

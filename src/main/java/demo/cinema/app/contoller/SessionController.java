@@ -25,9 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class SessionController {
 
     private final SessionService sessionService;
-    @PreAuthorize("hasAuthority('ADMIN')")
+
 
     @PostMapping("/createSession")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<SessionResponse> createSession(@RequestBody NewSessionCreationRequest newSessionCreationRequest) throws SeatsOutOfRange {
         SessionResponse createdSession = sessionService.createSession(newSessionCreationRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSession);

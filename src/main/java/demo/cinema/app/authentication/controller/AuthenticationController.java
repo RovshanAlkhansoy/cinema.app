@@ -8,6 +8,7 @@ import demo.cinema.app.authentication.dto.response.UserRegisterResponse;
 import demo.cinema.app.authentication.model.RefreshToken;
 import demo.cinema.app.authentication.service.AuthenticateService;
 import demo.cinema.app.authentication.service.RefreshTokenService;
+import demo.cinema.app.exception.RefreshTokenNotFound;
 import demo.cinema.app.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -70,8 +71,7 @@ public class AuthenticationController {
                             .accessToken(accessToken)
                             .refreshToken(refreshTokenRequest.getToken())
                             .build();
-                }).orElseThrow(() -> new RuntimeException(
-                        "Refresh token is not in database!"));
+                }).orElseThrow(RefreshTokenNotFound::new);
     }
 
 }
