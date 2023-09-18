@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class TicketTradeServiceImpl implements TicketTradeService {
 
 
     @Override
+    @Transactional
     public TicketBookingResponse bookTicket(TicketBookingRequest ticketBookingRequest, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);

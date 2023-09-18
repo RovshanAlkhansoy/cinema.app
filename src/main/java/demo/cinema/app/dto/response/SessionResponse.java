@@ -1,6 +1,7 @@
 package demo.cinema.app.dto.response;
 
 import demo.cinema.app.enums.SessionType;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ public class SessionResponse {
     private int availableSeatsCount;
     private Date showtime;
     private SessionType sessionType;
+    private BigDecimal sessionPrice;
     private Long hallId;
     private Long movieId;
 

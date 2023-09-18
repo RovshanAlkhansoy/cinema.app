@@ -41,8 +41,10 @@ public class TicketServiceImpl implements TicketService {
             Session session = sessionRepository.findById(newTicketCreationRequest.getSessionId())
                     .orElseThrow(SessionNotFound::new);
 
+            BigDecimal sessionPrice = session.getSessionPrice();
+
             Ticket ticket = Ticket.builder()
-                    .ticketPrice(newTicketCreationRequest.getTicketPrice())
+                    .ticketPrice(sessionPrice)
                     .ticketStatus(TicketStatus.BOOKED)
                     .bookingDateTime(Date.from(Instant.now()))
                     .session(session)
@@ -56,6 +58,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public TicketResponse updateTicket(Long ticketId, UpdateTicketRequest updateTicketRequest) {
         return ticketRepository.findById(ticketId)
                 .map(ticket -> {

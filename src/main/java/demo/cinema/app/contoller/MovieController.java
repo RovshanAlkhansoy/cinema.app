@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class MovieController {
     private final MovieService movieService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Create a new movie")
     @ApiResponses({
@@ -45,6 +47,7 @@ public class MovieController {
     }
 
     @PutMapping("updateMovie/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Update a movie by ID")
     @ApiResponses({
@@ -82,6 +85,7 @@ public class MovieController {
     }
 
     @GetMapping("/getMovieById/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Get a movie by ID")
     @ApiResponses({
@@ -98,6 +102,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/deleteMovieById/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation("Delete a movie by ID")
     @ApiResponses({
@@ -110,6 +115,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/deleteAllMovies")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation("Delete all movies")
     @ApiResponses({

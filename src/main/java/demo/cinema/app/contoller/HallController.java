@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class HallController {
     private final HallService hallService;
 
     @PostMapping("create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation("Create a new hall")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Hall created successfully"),
@@ -41,6 +43,7 @@ public class HallController {
     }
 
     @GetMapping("/getHallById/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation("Get a hall by ID")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Hall retrieved successfully"),
@@ -53,6 +56,7 @@ public class HallController {
 
 
     @GetMapping("/getAllHalls")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation("Get all halls")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Halls retrieved successfully"),
@@ -64,6 +68,7 @@ public class HallController {
 
 
     @PutMapping("/updateHall/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation("Update a hall by ID")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Hall updated successfully"),
@@ -77,6 +82,7 @@ public class HallController {
 
 
     @DeleteMapping("/deleteHallById/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation("Delete a hall by ID")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Hall deleted successfully"),

@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Positive;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +46,9 @@ public class Session {
     @Column(name = "AVAILABLE_SEATS_COUNT")
     @Positive(message = "Available seats count must be positive")
     private int availableSeatsCount;
+
+    @Column(name = "SESSION_PRICE")
+    private BigDecimal sessionPrice;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "SHOWTIME")

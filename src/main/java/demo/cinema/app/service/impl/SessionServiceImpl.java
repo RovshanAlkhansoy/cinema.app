@@ -3,6 +3,7 @@ package demo.cinema.app.service.impl;
 import demo.cinema.app.dto.request.NewSessionCreationRequest;
 import demo.cinema.app.dto.request.UpdateSessionRequest;
 import demo.cinema.app.dto.response.SessionResponse;
+import demo.cinema.app.enums.SessionType;
 import demo.cinema.app.exception.HallNotFound;
 import demo.cinema.app.exception.MovieNotFound;
 import demo.cinema.app.exception.SeatsOutOfRange;
@@ -14,11 +15,13 @@ import demo.cinema.app.repository.HallRepository;
 import demo.cinema.app.repository.MovieRepository;
 import demo.cinema.app.repository.SessionRepository;
 import demo.cinema.app.service.SessionService;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class SessionServiceImpl implements SessionService {
     private final HallRepository hallRepository;
 
     @Override
+    @Transactional
     public SessionResponse createSession(NewSessionCreationRequest newSessionCreationRequest) throws SeatsOutOfRange {
         Movie movie = movieRepository.findById(newSessionCreationRequest.getMovieId())
                 .orElseThrow(MovieNotFound::new);
@@ -43,9 +47,20 @@ public class SessionServiceImpl implements SessionService {
             throw new SeatsOutOfRange("Available seats count is not within the hall's capacity");
         }
 
+        BigDecimal sessionPrice;
+        if (newSessionCreationRequest.getSessionType() == SessionType.MORNING) {
+            sessionPrice = BigDecimal.valueOf(11.35);
+
+        } else {
+
+            sessionPrice = BigDecimal.valueOf(13.75);
+
+        }
+
         Session session = Session.builder()
                 .movie(movie)
                 .hall(hall)
+                .sessionPrice(sessionPrice)
                 .sessionType(newSessionCreationRequest.getSessionType())
                 .showtime(newSessionCreationRequest.getShowtime())
                 .availableSeatsCount(newSessionCreationRequest.getAvailableSeatsCount())
@@ -58,6 +73,7 @@ public class SessionServiceImpl implements SessionService {
                 .availableSeatsCount(savedSession.getAvailableSeatsCount())
                 .showtime(savedSession.getShowtime())
                 .sessionType(savedSession.getSessionType())
+                .sessionPrice(sessionPrice)
                 .hallId(savedSession.getHall().getId())
                 .movieId(savedSession.getMovie().getId())
                 .build();

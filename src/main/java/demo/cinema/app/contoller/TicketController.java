@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping("/createTicket")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Create a new ticket")
     @ApiResponses({
@@ -43,6 +45,7 @@ public class TicketController {
     }
 
     @PutMapping("/updateTicket/{ticketId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation("Update a ticket by ID")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ticket updated successfully"),
@@ -76,6 +79,7 @@ public class TicketController {
     }
 
     @DeleteMapping("/deleteTicketById/{ticketId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation("Delete a ticket by ID")
     @ApiResponses({
@@ -87,6 +91,7 @@ public class TicketController {
     }
 
     @DeleteMapping("/deleteAllTickets")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation("Delete all tickets")
     @ApiResponses({
