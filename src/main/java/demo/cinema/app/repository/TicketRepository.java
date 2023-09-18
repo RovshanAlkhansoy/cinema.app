@@ -9,9 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    @Query("SELECT t FROM Ticket t JOIN FETCH t.session s WHERE t.id = :ticketId")
-    Ticket findTicketWithSession(@Param("ticketId") Long ticketId);
-
     BigDecimal findTicketPriceBySessionId(Long sessionId);
 
     @Query("SELECT t FROM Ticket t " +

@@ -1,4 +1,4 @@
-package demo.cinema.app.repository;
+package demo.cinema.app.authentication.repository;
 
 import demo.cinema.app.authentication.model.RefreshToken;
 import java.util.Optional;

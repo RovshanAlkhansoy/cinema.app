@@ -28,7 +28,6 @@ databaseChangeLog:
   - changeSet:
       id: 2
       author: RovshanAlkhanov
-      comment: Add sequence for HALLS table ID
       changes:
         - createSequence:
             sequenceName: HALLS_ID_SEQ

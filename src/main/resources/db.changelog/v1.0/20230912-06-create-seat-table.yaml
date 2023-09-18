@@ -38,7 +38,6 @@ databaseChangeLog:
   - changeSet:
       id: 6
       author: RovshanAlkhanov
-      comment: Add sequence for SEATS table ID
       changes:
         - createSequence:
             sequenceName: SEATS_ID_SEQ

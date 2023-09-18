@@ -9,7 +9,7 @@ import demo.cinema.app.authentication.model.RefreshToken;
 import demo.cinema.app.authentication.service.AuthenticateService;
 import demo.cinema.app.authentication.service.RefreshTokenService;
 import demo.cinema.app.exception.RefreshTokenNotFound;
-import demo.cinema.app.service.JwtService;
+import demo.cinema.app.authentication.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

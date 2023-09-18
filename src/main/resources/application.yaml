@@ -2,8 +2,7 @@ spring:
   profiles:
     include: logging, management, server, db
   banner:
-    location:
-       -banner.txt
+    location: banner.txt
   application:
     name: cinema-app
 

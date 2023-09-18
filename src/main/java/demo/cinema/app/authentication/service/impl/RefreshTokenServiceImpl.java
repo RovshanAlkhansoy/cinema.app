@@ -6,7 +6,7 @@ import demo.cinema.app.enums.ErrorCodes;
 import demo.cinema.app.exception.RefreshTokenExpired;
 import demo.cinema.app.exception.UserNotFound;
 import demo.cinema.app.model.User;
-import demo.cinema.app.repository.RefreshTokenRepository;
+import demo.cinema.app.authentication.repository.RefreshTokenRepository;
 import demo.cinema.app.repository.UserRepository;
 import java.time.Instant;
 import java.util.Optional;

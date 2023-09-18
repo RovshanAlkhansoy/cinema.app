@@ -8,7 +8,7 @@ import demo.cinema.app.authentication.service.AuthenticateService;
 import demo.cinema.app.enums.Role;
 import demo.cinema.app.model.User;
 import demo.cinema.app.repository.UserRepository;
-import demo.cinema.app.service.JwtService;
+import demo.cinema.app.authentication.service.JwtService;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

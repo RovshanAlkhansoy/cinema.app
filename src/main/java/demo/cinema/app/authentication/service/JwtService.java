@@ -1,4 +1,4 @@
-package demo.cinema.app.service;
+package demo.cinema.app.authentication.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
