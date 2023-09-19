@@ -46,7 +46,7 @@ public class MovieController {
         return ResponseEntity.ok(createdMovie);
     }
 
-    @PutMapping("updateMovie/{id}")
+    @PutMapping("/updateMovie/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Update a movie by ID")

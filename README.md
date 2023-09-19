@@ -20,6 +20,10 @@
 
 # * As and example a few unit tests added
 
+# *SecurityConfig is not done properly, i had no time to make it done
+
+# *In some parts i used Mapstruct but due to time i can not do it as i wanted, builder used everywhere
+
 I actually didn't have enough time to do my best in this project as I was working full time in my current job, 
 I started this project from the very beginning and I want to have all the features and functions without launching 
 the app. If I were to take a running application and make it fully functional, I wouldn't even get to half of the 

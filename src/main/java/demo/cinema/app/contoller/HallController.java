@@ -30,7 +30,7 @@ public class HallController {
 
     private final HallService hallService;
 
-    @PostMapping("create")
+    @PostMapping("/create")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation("Create a new hall")
     @ApiResponses({

@@ -40,7 +40,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticateService.register(userRegisterRequest));
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<JwtResponse> authenticate(@RequestBody UserAuthenticationRequest authenticationRequest) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
 

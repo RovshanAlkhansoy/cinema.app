@@ -59,7 +59,7 @@ public class SessionController {
         return ResponseEntity.ok(sessionResponses);
     }
 
-    @GetMapping("/by-date/{date}")
+    @GetMapping("/by-date/{from}/{to}")
     @ApiOperation("Get sessions by date range")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Sessions retrieved successfully"),
