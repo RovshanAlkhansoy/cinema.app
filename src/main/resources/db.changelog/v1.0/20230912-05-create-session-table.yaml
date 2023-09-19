@@ -20,6 +20,11 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
+                  name: SESSION_PRICE
+                  type: DECIMAL
+                  constraints:
+                    nullable: true
+              - column:
                   name: SHOWTIME
                   type: TIMESTAMP
                   constraints:
